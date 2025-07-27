@@ -1,3 +1,5 @@
 {
-    "uri": "file"
+    "uri": "file",
+    "aws_access_key_id": "<Access_Key>",
+    "aws_secret_access_key": "<Secret_access_key>"
 }

@@ -1,19 +1,27 @@
 import os
 import json
-import boto3 as b3
+import boto3
 
 
-with open('config.json') as conf:
-    config = json.load(conf)
+with open('config.json') as config:
+    conf = json.load(config)
 
-uri = config['uri']
-
-s3 = b3.connect('s3',
-                region_name = 'code_region',
-                aws_access_key_id = key723474r
-                aws_secret_access_key = asdfasdf
-
-)
+s3 = boto3.client('s3',region_name = 'us-east-2',
+                   aws_access_key_id = conf['aws_access_key_id'], 
+                   aws_secret_access_key = conf['aws_secret_access_key'])
 
 
-for file in uri:
+buckets = [b['Name'] for b in s3.list_buckets()['Buckets']]
+
+
+if 'jv-glue-proj' not in buckets:
+    s3.create_bucket(Bucket='jv-glue-proj', 
+                     CreateBucketConfiguration={'LocationConstraint': 'us-east-2'})
+
+
+
+for file in os.listdir(conf['uri']):
+    s3.upload_file(
+        Filename = f'{os.path.join(conf['uri'], file)}',
+        Bucket = 'jv-glue-proj',
+        Key = f'{file}')
