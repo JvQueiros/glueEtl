@@ -14,8 +14,8 @@ s3 = boto3.client('s3',region_name = 'us-east-2',
 buckets = [b['Name'] for b in s3.list_buckets()['Buckets']]
 
 
-if 'jv-glue-proj' not in buckets:
-    s3.create_bucket(Bucket='jv-glue-proj', 
+if '<bucket_name>' not in buckets:
+    s3.create_bucket(Bucket='<bucket_name>', 
                      CreateBucketConfiguration={'LocationConstraint': 'us-east-2'})
 
 
@@ -23,5 +23,5 @@ if 'jv-glue-proj' not in buckets:
 for file in os.listdir(conf['uri']):
     s3.upload_file(
         Filename = f'{os.path.join(conf['uri'], file)}',
-        Bucket = 'jv-glue-proj',
+        Bucket = '<bucket_name>',
         Key = f'{file}')
